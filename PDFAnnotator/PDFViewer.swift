@@ -12,8 +12,7 @@ import CoreGraphics
 
 protocol PDFViewerDelegate {
     func getAnnotationsImage() -> CGImage
-    //func getTransformation() -> CGAffineTransform
-    func didFinishAnnotation(_ annotation: UIBezierPath)
+    func getPageRect() -> CGRect
 }
 
 class PDFViewer : UIView {
@@ -21,76 +20,59 @@ class PDFViewer : UIView {
     public var delegate : PDFViewerDelegate?
     
     // PDF page properties
-    public var pageRect : CGRect?
     private var pdfPage : CGImage?
     private let backGroundColor : CGColor = UIColor.white.cgColor
     
     // Annotations properties
-    private var liveAnnotation : UIBezierPath?
-    
+    public var liveAnnotation : UIBezierPath?
 
     // MARK: - Methods
     required init(page: CGImage, frame: CGRect, delegate: PDFViewerDelegate) {
         super.init(frame: frame)
         self.delegate = delegate
         pdfPage = page
-        pageRect = makeDefaultPageRect()
     }
     
-    /*
-         Checks if the touch was from an apple pencil and inside of the page rectangle.
-         If so, we start a new UIBezierPath and set its starting point to where to
-         touch occured.
-    */
     
     // MARK: - Apple Pencil drawing methods
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first!
-        let location = touch.location(in: self)
 
-        if (touch.type == .stylus && (pageRect?.contains(location))!){
+    public func handleTouchBegan(_ touch: UITouch, with event: UIEvent?){
+        let location = touch.location(in: self)
+        
+        if (touch.type == .stylus && (delegate!.getPageRect().contains(location))){
             liveAnnotation = UIBezierPath()
             liveAnnotation?.move(to: location)
         }
+        setNeedsDisplay()
     }
     
-    /*
-        Checks if the touch was from an apple pencil and inside of the page rectangle.
-        If so, we move through the coalesced touches, adding their points to the path.
-        Finally, we tell iOS we wish to refresh the display within the page rectangle.
-    */
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first!
+    public func handleTouchMoved(_ touch: UITouch, with event: UIEvent?) {
+        let pageRect = delegate!.getPageRect()
         for cotouch in (event?.coalescedTouches(for: touch))! {
             let location = cotouch.location(in: self)
-            if (touch.type == .stylus && (pageRect?.contains(location))!) {
+            if (touch.type == .stylus && (pageRect.contains(location))) {
                 liveAnnotation?.addLine(to: location)
             }
         }
-        setNeedsDisplay(pageRect!)
+        setNeedsDisplay()
     }
-    
-    /*
-         Checks if the touch was from an apple pencil and inside of the page rectangle.
-         If so, we move through the coalesced touches, adding their points to the path.
-         We then tell iOS we wish to refresh the display within the page rectangle.
-         Once we have drawn the UIBezierPath, we send it to the delegate.
-    */
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first!
+
+    public func handleTouchEnded(_ touch: UITouch, with event: UIEvent?) {
+        let pageRect = delegate!.getPageRect()
         for cotouch in (event?.coalescedTouches(for: touch))! {
             let location = cotouch.location(in: self)
-            if (touch.type == .stylus && (pageRect?.contains(location))!) {
+            if (touch.type == .stylus && pageRect.contains(location)) {
                 liveAnnotation?.addLine(to: location)
             }
         }
-        setNeedsDisplay(pageRect!)
-        delegate?.didFinishAnnotation(liveAnnotation!)
+        liveAnnotation = nil
+        setNeedsDisplay()
     }
 
     // On every draw loop iteration, we draw the page, then the finished annotations, and finally the live annotation.
     override func draw(_ rect: CGRect) {
         let ctx = UIGraphicsGetCurrentContext()
+        ctx?.clear(rect)
         drawPage(ctx!)
         drawAnnotations(ctx!)
         setupStroke(ctx!)
@@ -98,35 +80,24 @@ class PDFViewer : UIView {
     }
     
     // Draws the background and then the page into the context.
+    
     internal func drawPage(_ ctx: CGContext) {
         drawPageBackground(ctx)
-        ctx.draw(pdfPage!, in: pageRect!)
+        ctx.draw(pdfPage!, in: delegate!.getPageRect())
     }
     
     // Returns the default CGRect for displaying the PDF.
     // The default is to fully display the PDF in the center of the screen.
-    internal func makeDefaultPageRect() -> CGRect {
-        let width = CGFloat(pdfPage?.width as! Int)
-        let height = CGFloat(pdfPage?.height as! Int)
-        
-        let originX = self.bounds.midX - width*0.5
-        let originY = self.bounds.midY - height*0.5
-        
-        let origin = CGPoint(x: originX, y: originY)
-        let size = CGSize(width: width, height: height)
-        
-        return CGRect(origin: origin, size: size)
-    }
     
     
     internal func drawPageBackground(_ ctx: CGContext) {
         ctx.setFillColor(backGroundColor)
-        ctx.fill(pageRect!)
+        ctx.fill(delegate!.getPageRect())
     }
     
     internal func drawAnnotations(_ ctx: CGContext){
         let image = delegate?.getAnnotationsImage()
-        ctx.draw(image!, in: pageRect!)
+        ctx.draw(image!, in: delegate!.getPageRect())
     }
     
     internal func drawAnnotation(){
