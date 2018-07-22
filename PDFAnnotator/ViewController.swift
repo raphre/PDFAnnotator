@@ -10,38 +10,63 @@
 import UIKit
 import PDFKit
 
-class ViewController: UIViewController {
-    
-    // MARK : -
+class ViewController: UIViewController, PDFViewerDelegate {
     // MARK : - Properties
-    // MARK : -
-    
     var pdfViewer : PDFViewer?
     var pdf : PDFDocument? = nil
+    public var annotations = [UIBezierPath]()
     
-    
-    // MARK : -
     // MARK : - Methods
-    // MARK : -
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // Load the PDF from the main bundle and grab the first page
-        let pdfURL = Bundle.main.url(forResource: "pdf", withExtension: "pdf") as! URL
+        let pdfURL = Bundle.main.url(forResource: "pdf", withExtension: "pdf")!
         pdf = PDFDocument(url: pdfURL)!
         let page = getPDFCGImage((pdf?.page(at: 0))!)
         
         // Give the first page of the sampe PDF to the PDFViewer along with its frame
-        pdfViewer = PDFViewer(page: page!, frame: self.view.bounds)
+        pdfViewer = PDFViewer(page: page!, frame: self.view.bounds, delegate: self)
         
         // Make the PDFViewer the main view
         self.view = pdfViewer!
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    // MARK: - Protocol Methods
+    
+    func getAnnotationsImage() -> CGImage {
+        let size = self.pdfViewer?.pageRect?.size
+        
+        UIGraphicsBeginImageContext(size!)
+        let ctx = UIGraphicsGetCurrentContext()
+        ctx?.setStrokeColor(UIColor.red.cgColor)
+        for path in annotations {
+            path.stroke()
+        }
+        let image = ctx?.makeImage()
+        UIGraphicsEndImageContext()
+        
+        return image!
     }
+    
+    // Takes a newly finished annotation, transforms its coordinates to page coords. and stores it.
+    func didFinishAnnotation(_ annotation: UIBezierPath) {
+        let pageRect = self.pdfViewer?.pageRect
+        let pageRectOrigin = pageRect?.origin
+        let proX = pageRectOrigin?.x
+        let proY = (pageRectOrigin?.y)! + (self.pdfViewer?.pageRect?.height)!
+        let trans1 = CGAffineTransform(scaleX: 1.0, y: -1.0)
+        let trans2 = CGAffineTransform(translationX: (-1.0)*proX!, y: proY)
+        
+        let correctedAnnotation = annotation.copy() as! UIBezierPath
+        correctedAnnotation.apply(trans1)
+        correctedAnnotation.apply(trans2)
+        correctedAnnotation.lineWidth = 3.0
+        correctedAnnotation.lineCapStyle = .round
+        correctedAnnotation.lineJoinStyle = .round
+        annotations.append(correctedAnnotation)
+    }
+
+    // MARK: - PDF conversion method.
     
     // Converts the PDFPage into a CGImage. This method handles
     // page flipping.
@@ -62,5 +87,10 @@ class ViewController: UIViewController {
         return ctx.makeImage()
     }
     
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
 }
 
