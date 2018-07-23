@@ -7,16 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6496735221056B8D00D8E827 /* PDFPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496735121056B8D00D8E827 /* PDFPageView.swift */; };
 		64DFBB102103E48800378333 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64DFBB0F2103E48800378333 /* AppDelegate.swift */; };
 		64DFBB122103E48800378333 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64DFBB112103E48800378333 /* ViewController.swift */; };
 		64DFBB152103E48800378333 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 64DFBB132103E48800378333 /* Main.storyboard */; };
 		64DFBB172103E48A00378333 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 64DFBB162103E48A00378333 /* Assets.xcassets */; };
 		64DFBB1A2103E48A00378333 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 64DFBB182103E48A00378333 /* LaunchScreen.storyboard */; };
 		64DFBB222103E62A00378333 /* pdf.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 64DFBB212103E62A00378333 /* pdf.pdf */; };
-		64DFBB282103F2B400378333 /* PDFViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64DFBB272103F2B400378333 /* PDFViewer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6496735121056B8D00D8E827 /* PDFPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFPageView.swift; sourceTree = "<group>"; };
 		64DFBB0C2103E48800378333 /* PDFAnnotator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PDFAnnotator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64DFBB0F2103E48800378333 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		64DFBB112103E48800378333 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -25,7 +26,6 @@
 		64DFBB192103E48A00378333 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		64DFBB1B2103E48A00378333 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		64DFBB212103E62A00378333 /* pdf.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = pdf.pdf; sourceTree = "<group>"; };
-		64DFBB272103F2B400378333 /* PDFViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFViewer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,7 +60,7 @@
 			children = (
 				64DFBB0F2103E48800378333 /* AppDelegate.swift */,
 				64DFBB112103E48800378333 /* ViewController.swift */,
-				64DFBB272103F2B400378333 /* PDFViewer.swift */,
+				6496735121056B8D00D8E827 /* PDFPageView.swift */,
 				64DFBB132103E48800378333 /* Main.storyboard */,
 				64DFBB162103E48A00378333 /* Assets.xcassets */,
 				64DFBB182103E48A00378333 /* LaunchScreen.storyboard */,
@@ -144,7 +144,7 @@
 			files = (
 				64DFBB122103E48800378333 /* ViewController.swift in Sources */,
 				64DFBB102103E48800378333 /* AppDelegate.swift in Sources */,
-				64DFBB282103F2B400378333 /* PDFViewer.swift in Sources */,
+				6496735221056B8D00D8E827 /* PDFPageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
