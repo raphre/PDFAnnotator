@@ -14,22 +14,12 @@
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="PDFAnnotator" customModuleProvider="target" sceneMemberID="viewController">
-                    <scrollView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" delaysContentTouches="NO" maximumZoomScale="100" id="K6b-2D-esG">
+                    <view key="view" contentMode="scaleToFill" id="sm7-eE-YpL">
                         <rect key="frame" x="0.0" y="0.0" width="1366" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Equ-Lk-4Km" customClass="PDFPageView" customModule="PDFAnnotator" customModuleProvider="target">
-                                <rect key="frame" x="563" y="448" width="240" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="Voq-if-1VM"/>
-                    </scrollView>
-                    <connections>
-                        <outlet property="pageView" destination="Equ-Lk-4Km" id="CVb-Bp-0kc"/>
-                        <outlet property="scrollView" destination="K6b-2D-esG" id="p9h-Df-93c"/>
-                    </connections>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="z47-p0-vhd"/>
+                    </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
